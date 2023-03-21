@@ -41,10 +41,10 @@ class Book(models.Model):
     poster = models.ImageField(upload_to="media/books/")
     year = models.PositiveSmallIntegerField(default=2000)
     country = models.CharField(max_length=30)
-    directors = models.ManyToManyField(Author, related_name="author")
-    genres = models.ManyToManyField(Genre)
+    author = models.ForeignKey(Author, related_name="author", on_delete=models.CASCADE)
+    genre = models.ForeignKey(Genre, related_name="genre", on_delete=models.CASCADE)
     url = models.SlugField(max_length=130, unique=True)
-    draft = models.BooleanField(default=False)
+    draft = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -65,6 +65,32 @@ class Review(models.Model):
         return f"{self.name} - {self.book}"
 
 
+class RatingStar(models.Model):
+    '''Зірки рейтингу'''
+    value = models.SmallIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.value}'
+
+    class Meta:
+        ordering = ["-value"]
+
+
+class Rating(models.Model):
+    '''Сам рейтинг'''
+    ip = models.CharField(max_length=15)
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="ratings"
+    )
+
+    def __str__(self):
+        return f"{self.star} - {self.book}"
+
+
 class Order(models.Model):
+    '''Замовлення'''
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="orders")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="books")

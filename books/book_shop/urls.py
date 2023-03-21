@@ -1,7 +1,13 @@
-# from rest_framework.routers import SimpleRouter
-#
-# from book_shop.views import AuthorViewSet
-#
-# router = SimpleRouter()
-#
-# router.register(f'author', AuthorViewSet)
+from django.urls import path
+
+from book_shop import views
+
+
+urlpatterns = [
+    path('book/', views.BookListView.as_view()),
+    path('book/<int:pk>/', views.BookDetailView.as_view()),
+    path('review/', views.ReviewView.as_view()),
+    path('author/', views.AuthorListView.as_view()),
+    path('author/<int:pk>', views.AuthorDetailView.as_view()),
+    path('rating/', views.AddStarRatingViewSet.as_view()),
+]
