@@ -11,7 +11,7 @@ from book_shop.serializers import (
     AuthorDetailSerializer,
     CreateRatingSerializer
 )
-from book_shop.service import get_client_ip, BookFilter
+from book_shop.service import get_client_ip, BookFilter, PaginationMovies
 
 
 class BookListView(generics.ListAPIView):
@@ -20,6 +20,7 @@ class BookListView(generics.ListAPIView):
     filterset_class = BookFilter
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = PaginationMovies
     # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
