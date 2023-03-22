@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
 
-    'client',
     'book_shop',
 ]
 

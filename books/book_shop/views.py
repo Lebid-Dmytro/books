@@ -9,7 +9,7 @@ from book_shop.serializers import (
     ReviewSerializer,
     AuthorSerializer,
     AuthorDetailSerializer,
-    CreateRatingSerializer
+    CreateRatingSerializer, OrderSerializer
 )
 from book_shop.service import get_client_ip, BookFilter, PaginationMovies
 
@@ -63,3 +63,7 @@ class AddStarRatingViewSet(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(ip=get_client_ip(self.request))
 
+
+class OrderCreateView(generics.CreateAPIView):
+    serializer_class = OrderSerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]

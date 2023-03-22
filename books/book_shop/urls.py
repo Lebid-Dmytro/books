@@ -10,4 +10,5 @@ urlpatterns = [
     path('author/', views.AuthorListView.as_view()),
     path('author/<int:pk>', views.AuthorDetailView.as_view()),
     path('rating/', views.AddStarRatingViewSet.as_view()),
+    path('order/', views.OrderCreateView.as_view()),
 ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from book_shop.models import Author, Genre, Book, Review, Rating
+from book_shop.models import Author, Book, Review, Rating, Order
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -12,6 +12,12 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ('id', 'title', 'author', 'genre', 'rating_user', 'middle_star')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = "__all__"
 
 
 class ReviewSerializer(serializers.ModelSerializer):

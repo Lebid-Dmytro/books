@@ -1,7 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-
-from client.models import Client
+from rest_framework.authtoken.admin import User
 
 
 class Genre(models.Model):
@@ -92,5 +91,9 @@ class Rating(models.Model):
 
 class Order(models.Model):
     '''Замовлення'''
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="orders")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="books")
+    amount = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.user} - {self.book}"
