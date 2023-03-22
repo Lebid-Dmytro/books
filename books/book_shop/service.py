@@ -1,3 +1,8 @@
+from django_filters import rest_framework as filters
+
+from book_shop.models import Book
+
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -5,3 +10,17 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+class CharFilterInFilter(filters.BaseInFilter, filters.CharFilter):
+    pass
+
+
+class BookFilter(filters.FilterSet):
+    genre = CharFilterInFilter(field_name='genre__name', lookup_expr='in')
+    author = CharFilterInFilter(field_name='author__name', lookup_expr='in')
+    year = filters.RangeFilter()
+
+    class Meta:
+        model = Book
+        fields = ['genre', 'author', 'year']

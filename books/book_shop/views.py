@@ -1,5 +1,6 @@
 from django.db import models
-from rest_framework import generics, viewsets
+from rest_framework import generics, permissions
+from django_filters.rest_framework import DjangoFilterBackend
 
 from book_shop.models import Author, Book
 from book_shop.serializers import (
@@ -10,12 +11,16 @@ from book_shop.serializers import (
     AuthorDetailSerializer,
     CreateRatingSerializer
 )
-from book_shop.service import get_client_ip
+from book_shop.service import get_client_ip, BookFilter
 
 
 class BookListView(generics.ListAPIView):
     '''Список книг'''
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = BookFilter
     serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         books = Book.objects.filter(draft=True).annotate(
@@ -25,10 +30,6 @@ class BookListView(generics.ListAPIView):
             middle_star=models.Sum(models.F('ratings__star')) / models.Count(models.F('ratings'))
         )
         return books
-    #
-    # def get_queryset(self):
-    #     books = Book.objects.filter(draft=True)
-    #     return books
 
 
 class BookDetailView(generics.RetrieveAPIView):
